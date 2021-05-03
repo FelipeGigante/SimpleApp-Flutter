@@ -1,6 +1,6 @@
-# first_app
+# Simple App in Flutter to train usability
 
-Primeiro App em Flutter
+App with initial concepts (Widgets, Buttons, Classes, Methods)
 
 ## Getting Started
 
