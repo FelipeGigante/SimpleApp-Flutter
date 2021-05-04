@@ -27,6 +27,6 @@ class BlueButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed
-    );;
+    );
   }
 }
