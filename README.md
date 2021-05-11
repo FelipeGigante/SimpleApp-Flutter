@@ -1,8 +1,6 @@
 # Simple App in Flutter
 
-<div align="center">
  ![Screen-Recording-_11-05-2021-20-47-33_](https://user-images.githubusercontent.com/61218356/117897951-3d6a0c80-b29a-11eb-80eb-d2d99c6b8286.gif)
-</div>
 
 ## Getting Started
 
