@@ -1,32 +1,59 @@
+import 'package:first_app/drawer_list.dart';
 import 'package:first_app/pages/hello_listview.dart';
 import 'package:first_app/pages/hello_page1.dart';
 import 'package:first_app/pages/hello_page2.dart';
 import 'package:first_app/pages/hello_page3.dart';
 import 'package:first_app/widgets/blue_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Hello Flutter"),
-        centerTitle: true,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Hello Flutter"),
+          centerTitle: true,
+          bottom: TabBar(
+            tabs: [
+              Tab(text: "Page 1",),
+              Tab(text: "Page 2",),
+              Tab(text: "Page 3",)
+            ],
+          ),
+        ),
+
+        body: TabBarView(children: [
+            _body(context),
+
+          Container(
+              color: Colors.green,
+            ),
+
+          Container(
+            color: Colors.yellow,
+          )
+          ],),
+
+        drawer: DrawerList(),
       ),
-      body: _body(context),
     );
   }
 
   _body(context) {
     return Container(
+      padding: EdgeInsets.only(top: 20),
       color: Colors.white,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _text(),
           _pageView(),
-          _buttons(context)
+          _buttons()
         ],
       ),
     );
@@ -48,27 +75,29 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  _buttons(context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            BlueButton("ListView", onPressed: () =>  _onClickNavigator(context, HelloListView())),
-            BlueButton("Page 2", onPressed: () =>  _onClickNavigator(context, HelloPage2())),
-            BlueButton("Page 3", onPressed: () =>  _onClickNavigator(context, HelloPage3())),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            BlueButton("Snack", onPressed: () => _onClickSnack),
-            BlueButton("Dialog", onPressed: () => _onClickDialog),
-            BlueButton("Toast", onPressed: () => _onClickToast)
-          ],
-        )
-      ],
-    );
+  _buttons() {
+    return Builder(builder: (context) {
+      return Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              BlueButton("ListView", onPressed: () =>  _onClickNavigator(context, HelloListView())),
+              BlueButton("Page 2", onPressed: () =>  _onClickNavigator(context, HelloPage2())),
+              BlueButton("Page 3", onPressed: () =>  _onClickNavigator(context, HelloPage3())),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              BlueButton("Snack", onPressed: () => _onClickSnack(context)),
+              BlueButton("Dialog", onPressed: () => _onClickDialog(context)),
+              BlueButton("Toast", onPressed: () => _onClickToast(context))
+            ],
+          )
+        ],
+      );
+    },);
   }
 
   void _onClickNavigator(BuildContext context, Widget page)  async  {
@@ -79,13 +108,49 @@ class HomePage extends StatelessWidget {
     print(">> $s");
   }
 
-  _onClickSnack() {
+  _onClickSnack(context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Botão Clicado!"),
+      action: SnackBarAction(label: "Ok", onPressed: () {
+        print("Ok");
+      }),
+    ));
   }
 
-  _onClickDialog() {
+  _onClickDialog(context) {
+    showDialog(context: context,  barrierDismissible: false, builder: (context) {
+      return AlertDialog(
+        title: Text("Alerta Vermelho!!",
+          style: TextStyle(
+            color: Colors.red,
+          ),),
+        actions: <Widget>[
+          FlatButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          ),
+          FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+          )
+        ],
+      );
+    });
   }
 
-  _onClickToast() {
+  _onClickToast(context) {
+    Fluttertoast.showToast(
+        msg: "Flutter is Cool... Admit",
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 4,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 20.0
+    );
   }
 
   _img(String img) {
